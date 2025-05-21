@@ -1,0 +1,13 @@
+﻿namespace Hospital_Management.ViewModels;
+
+public record DoctorGetVM : BaseEntityVM
+{
+    public string? Specialty { get; set; }
+    public string? WorkingHours { get; set; }
+    public string? RoomNumber { get; set; }
+
+    public string? AppUserId { get; set; }
+    public AppUserIncludeVM? AppUser { get; set; }
+
+    public ICollection<AppointmentIncludeVM>? Appointments { get; set; }
+}

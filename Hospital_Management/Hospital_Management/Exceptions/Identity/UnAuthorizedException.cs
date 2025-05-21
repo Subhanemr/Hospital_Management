@@ -1,0 +1,8 @@
+﻿using Hospital_Management.Extantions;
+
+namespace Hospital_Management.Exceptions;
+
+public class UnAuthorizedException : Exception, IBaseException
+{
+    public UnAuthorizedException(string message = "UnAuthorized 401!") : base(message) { }
+}
