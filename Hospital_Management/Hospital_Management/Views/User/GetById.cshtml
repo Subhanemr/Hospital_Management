@@ -1,0 +1,56 @@
+﻿@model AppUserGetVM
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 text-gray-800">İstifadəçi Detalları</h1>
+        <a asp-action="Index" class="btn btn-secondary">← Geri</a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Ətraflı Məlumat</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <td>@Model.Name @Model.Surname</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th>Telefon</th>
+                        <td>@Model.PhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Doğum Tarixi</th>
+                        <td>@Model.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                    <tr>
+                        <th>Profil Şəkli</th>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(Model.Url))
+                            {
+                                <img src="@Model.Url" alt="Profil Şəkli" width="100" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">Şəkil mövcud deyil</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Rol</th>
+                        <td>
+                            @(Model.DoctorId != null ? "Həkim" : Model.PatientId != null ? "Pasiyent" : "İstifadəçi")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

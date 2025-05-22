@@ -10,6 +10,7 @@ public record AppUserGetVM
     public string? Surname { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public string? Url { get; set; }
+    public bool IsActivate { get; set; }
 
     public string? DoctorId { get; set; }
     public DoctorIncludeVM? Doctor { get; set; }

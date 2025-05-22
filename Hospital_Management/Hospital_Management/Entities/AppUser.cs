@@ -8,7 +8,7 @@ public class AppUser : IdentityUser
     public string Surname { get; set; } = null!;
     public DateTime? DateOfBirth { get; set; }
     public string? Url { get; set; }
-    public bool IsActivate { get; set; } = true;
+    public bool IsActivate { get; set; } = false;
 
     public string? DoctorId { get; set; }
     public Doctor? Doctor { get; set; }

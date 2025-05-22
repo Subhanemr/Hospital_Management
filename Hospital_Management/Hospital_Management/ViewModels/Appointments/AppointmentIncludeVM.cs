@@ -7,5 +7,7 @@ public record AppointmentIncludeVM : BaseEntityVM
     public string? Notes { get; set; }
 
     public string? DoctorId { get; set; }
+    public DoctorIncludeVM? Doctor { get; set; }
     public string? PatientId { get; set; }
+    public PatientIncludeVM? Patient { get; set; }
 }

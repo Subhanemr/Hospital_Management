@@ -1,4 +1,5 @@
 ﻿using Hospital_Management.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_Management.Controllers
@@ -11,21 +12,20 @@ namespace Hospital_Management.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
-
-
             return View();
         }
 
         public IActionResult ErrorPage(string error)
         {
+            ViewBag.Error = error;
             if (error == null)
             {
                 return RedirectToAction(nameof(Index));
             }
-            return View(model: error);
+            return View();
         }
     }
 }

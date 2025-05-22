@@ -1,5 +1,6 @@
 using Hospital_Management.Extantions;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
@@ -17,6 +18,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.Use(async (context, next) =>
+{
+    if (!context.User.Identity.IsAuthenticated &&
+        !context.Request.Path.StartsWithSegments("/account/login"))
+    {
+        context.Response.Redirect("/Account/Login");
+        return;
+    }
+
+    await next();
+});
+
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
@@ -26,4 +41,3 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
-

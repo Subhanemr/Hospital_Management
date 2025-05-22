@@ -1,7 +1,9 @@
-﻿using Hospital_Management.DAL;
+﻿using FluentValidation;
+using Hospital_Management.DAL;
 using Hospital_Management.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Hospital_Management.Extantions
 {
@@ -23,6 +25,8 @@ namespace Hospital_Management.Extantions
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("Default")));
 
             services.AddScoped<AppDbContextInitializer>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

@@ -1,0 +1,133 @@
+﻿@model PaginationVM<AppUserGetVM>
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 text-gray-800">Şəxsi Hesab</h1>
+        <form method="get" class="d-flex">
+            <input type="text" name="search" value="@Model.Search" class="form-control mr-2" placeholder="Axtar..." />
+            <button class="btn btn-primary">Axtar</button>
+        </form>
+    </div>
+    @if(User.IsInRole(UserRoles.Doctor.ToString()) || User.IsInRole(UserRoles.Admin.ToString()))
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h3 text-gray-800">Tibbi Kartlar</h1>
+            <a asp-action="Create" class="btn btn-success">+ Yeni Tibbi Kart</a>
+        </div>
+    }
+
+    @if (Model.Items != null && Model.Items.Any())
+    {
+        var user = Model.Items.First();
+        <!-- çünki yalnız bir istifadəçi olacaq -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Əsas Məlumatlar</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <td>@user.Name @user.Surname</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@user.Email</td>
+                    </tr>
+                    <tr>
+                        <th>İstifadəçi Adı</th>
+                        <td>@user.UserName</td>
+                    </tr>
+                    <tr>
+                        <th>Telefon</th>
+                        <td>@user.PhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Doğum Tarixi</th>
+                        <td>@user.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                    <tr>
+                        <th>Rol</th>
+                        <td>
+                                @if (User.IsInRole(UserRoles.Admin.ToString()))
+                                {
+                                    @:Admin
+                                }
+                                else
+                                {
+                                
+                                @(user.DoctorId != null ? "Həkim" : user.PatientId != null ? "Pasiyent" : "İstifadəçi")
+                                }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        @if (user.Doctor != null && user.Doctor.Appointments?.Any() == true)
+        {
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Həkim Görüşləri</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Tarix</th>
+                                <th>Status</th>
+                                <th>Qeyd</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var appt in user.Doctor.Appointments)
+                            {
+                                <tr>
+                                    <td>@appt.AppointmentDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@appt.Status</td>
+                                    <td>@appt.Notes</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        @if (user.Patient != null && user.Patient.MedicalCards?.Any() == true)
+        {
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Tibbi Kartlar</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Xəstəlik Tarixi</th>
+                                <th>Lab Nəticələri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var card in user.Patient.MedicalCards)
+                            {
+                                <tr>
+                                    <td>@card.DiseaseHistory</td>
+                                    <td>@card.LabResults</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            İstifadəçi məlumatları tapılmadı.
+        </div>
+    }
+
+</div>

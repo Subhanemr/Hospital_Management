@@ -7,4 +7,5 @@ public record DoctorIncludeVM : BaseEntityVM
     public string? RoomNumber { get; set; }
 
     public string? AppUserId { get; set; }
+    public ICollection<AppointmentIncludeVM>? Appointments { get; set; }
 }

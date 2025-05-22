@@ -1,0 +1,46 @@
+﻿@model AppointmentGetVM
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 text-gray-800">Görüş Detalları</h1>
+        <a asp-action="Index" class="btn btn-secondary">← Geri</a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Detallı Məlumat</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Tarix</th>
+                            <th>Status</th>
+                            <th>Qeyd</th>
+                            <th>Həkim</th>
+                            <th>Pasiyent</th>
+                            <th>SoftSilinib?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Model.AppointmentDate?.ToString("yyyy-MM-dd HH:mm") ?? "Tarix təyin olunmayıb"
+                            </td>
+                            <td>@Model.Status</td>
+                            <td>@Model.Notes</td>
+                            <td>@Model.Doctor?.Specialty</td>
+                            <td>@Model.Patient?.AppUser?.Name @Model.Patient?.AppUser?.Surname</td>
+                            <td>
+                                @(Model.IsDeleted ? "✅ Bəli" : "❌ Xeyr")
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
