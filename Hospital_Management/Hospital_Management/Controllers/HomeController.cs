@@ -5,11 +5,11 @@ namespace Hospital_Management.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly AppDbContext _context;
 
-        public HomeController(AppDbContext db)
+        public HomeController(AppDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
         public IActionResult Index()

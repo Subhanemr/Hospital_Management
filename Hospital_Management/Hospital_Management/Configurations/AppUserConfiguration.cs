@@ -10,17 +10,14 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.Property(u => u.Name)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(250);
 
         builder.Property(u => u.Surname)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(250);
 
         builder.Property(u => u.DateOfBirth)
             .IsRequired(false);
-
-        builder.Property(u => u.Url)
-            .HasMaxLength(200);
 
         builder.HasOne(u => u.Doctor)
             .WithOne(d => d.AppUser)

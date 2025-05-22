@@ -11,8 +11,7 @@ public class AppointmentCreateVMValidator : AbstractValidator<AppointmentCreateV
             .GreaterThanOrEqualTo(DateTime.Today).WithMessage("Görüş tarixi bu gün və ya daha sonrakı gün olmalıdır.");
 
         RuleFor(x => x.Status)
-            .NotEmpty().WithMessage("Status boş ola bilməz.")
-            .MaximumLength(50).WithMessage("Status 50 simvoldan çox ola bilməz.");
+            .NotEmpty().WithMessage("Status boş ola bilməz.");
 
         RuleFor(x => x.DoctorId)
             .NotEmpty().WithMessage("Həkim seçilməlidir.");

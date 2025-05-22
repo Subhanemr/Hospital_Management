@@ -9,7 +9,7 @@ public class DoctorCreateVMValidator : AbstractValidator<DoctorCreateVM>
     {
         RuleFor(x => x.Specialty)
             .NotEmpty().WithMessage("İxtisas boş ola bilməz.")
-            .MaximumLength(100).WithMessage("İxtisas 100 simvoldan çox ola bilməz.");
+            .MaximumLength(5000).WithMessage("İxtisas 100 simvoldan çox ola bilməz.");
 
         RuleFor(x => x.WorkingHours)
             .NotEmpty().WithMessage("İş saatları boş ola bilməz.");

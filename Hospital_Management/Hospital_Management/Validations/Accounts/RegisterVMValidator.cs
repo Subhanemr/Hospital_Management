@@ -9,7 +9,7 @@ public class RegisterVMValidator : AbstractValidator<RegisterVM>
     {
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("İstifadəçi adı boş ola bilməz.")
-            .MaximumLength(100).WithMessage("İstifadəçi adı 100 simvoldan çox ola bilməz.");
+            .MaximumLength(250).WithMessage("İstifadəçi adı 250 simvoldan çox ola bilməz.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email boş ola bilməz.")
@@ -21,11 +21,11 @@ public class RegisterVMValidator : AbstractValidator<RegisterVM>
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Ad boş ola bilməz.")
-            .MaximumLength(100).WithMessage("Ad 100 simvoldan çox ola bilməz.");
+            .MaximumLength(250).WithMessage("Ad 250 simvoldan çox ola bilməz.");
 
         RuleFor(x => x.Surname)
             .NotEmpty().WithMessage("Soyad boş ola bilməz.")
-            .MaximumLength(100).WithMessage("Soyad 100 simvoldan çox ola bilməz.");
+            .MaximumLength(250).WithMessage("Soyad 250 simvoldan çox ola bilməz.");
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Şifrə boş ola bilməz.")

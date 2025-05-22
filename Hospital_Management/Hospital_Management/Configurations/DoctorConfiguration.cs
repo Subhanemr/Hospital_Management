@@ -12,7 +12,7 @@ public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
 
         builder.Property(d => d.Specialty)
             .IsRequired()
-            .HasMaxLength(1000);
+            .HasMaxLength(5000);
 
         builder.Property(d => d.WorkingHours)
             .IsRequired()

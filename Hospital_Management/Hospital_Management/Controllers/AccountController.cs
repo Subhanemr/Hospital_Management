@@ -4,10 +4,8 @@ using Hospital_Management.Enums;
 using Hospital_Management.Exceptions;
 using Hospital_Management.Extantions;
 using Hospital_Management.ViewModels;
-using Hospital_Management.ViewModels.Accounts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Hospital_Management.Controllers
 {
@@ -18,7 +16,8 @@ namespace Hospital_Management.Controllers
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _http;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IHttpContextAccessor http)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
+            IMapper mapper, IHttpContextAccessor http)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,7 +30,7 @@ namespace Hospital_Management.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM login, string? returnUrl)
+        public async Task<IActionResult> Login(LoginVM login)
         {
             if (!ModelState.IsValid)
                 throw new InvalidInputException("");

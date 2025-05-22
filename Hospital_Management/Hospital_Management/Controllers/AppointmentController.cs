@@ -8,5 +8,6 @@ namespace Hospital_Management.Controllers
         {
             return View();
         }
+
     }
 }
