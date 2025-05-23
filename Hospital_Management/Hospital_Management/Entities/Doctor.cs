@@ -7,7 +7,7 @@ public class Doctor : BaseEntity
     public string RoomNumber { get; set; } = null!;
 
     public string AppUserId { get; set; } = null!;
-    public  AppUser AppUser { get; set; } = null!;
+    public AppUser AppUser { get; set; } = null!;
 
     public ICollection<Appointment>? Appointments { get; set; }
 }

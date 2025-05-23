@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hospital_Management.DAL;
 using Hospital_Management.Entities;
 using Hospital_Management.Enums;
 using Hospital_Management.Extantions;
@@ -10,15 +11,17 @@ using Microsoft.AspNetCore.Mvc;
 public class AccountController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly AppDbContext _context;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IMapper _mapper;
 
     public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-        IMapper mapper)
+        IMapper mapper, AppDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
+        _context = context;
     }
 
     [AllowAnonymous]
@@ -80,11 +83,12 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return BadRequest("Məlumatlar düzgün deyil.");
 
-        AppUser user = _mapper.Map<AppUser>(register.AppUser);
-        user.Name = user.Name.Capitalize();
-        user.Surname = user.Surname.Capitalize();
-
-        var result = await _userManager.CreateAsync(user, register.AppUser.Password);
+        Doctor user = _mapper.Map<Doctor>(register);
+        user.AppUser.Name = user.AppUser.Name.Capitalize();
+        user.AppUser.Surname = user.AppUser.Surname.Capitalize();
+        user.AppUser.DoctorId = user.Id;
+        await _context.Doctors.AddAsync(user);
+        var result = await _userManager.CreateAsync(user.AppUser, register.AppUser.Password);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -94,9 +98,9 @@ public class AccountController : Controller
             return BadRequest("İstifadəçi yaradılarkən xəta baş verdi.");
         }
 
-        await _userManager.AddToRoleAsync(user, UserRoles.Doctor.ToString());
-
-        return RedirectToAction("Index", "Home", new { Area = "" });
+        await _userManager.AddToRoleAsync(user.AppUser, UserRoles.Doctor.ToString());
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index", "Doctor", new { Area = "" });
     }
 
     public async Task<IActionResult> RegisterPatient()
@@ -110,11 +114,13 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return BadRequest("Məlumatlar düzgün daxil edilməyib.");
 
-        AppUser user = _mapper.Map<AppUser>(register.AppUser);
-        user.Name = user.Name.Capitalize();
-        user.Surname = user.Surname.Capitalize();
+        Patient user = _mapper.Map<Patient>(register);
+        user.AppUser.Name = user.AppUser.Name.Capitalize();
+        user.AppUser.Surname = user.AppUser.Surname.Capitalize();
+        user.AppUser.PatientId = user.Id;
+        await _context.Patients.AddAsync(user);
 
-        var result = await _userManager.CreateAsync(user, register.AppUser.Password);
+        var result = await _userManager.CreateAsync(user.AppUser, register.AppUser.Password);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -124,10 +130,11 @@ public class AccountController : Controller
             return BadRequest("İstifadəçi yaradılarkən xəta baş verdi.");
         }
 
-        await _userManager.AddToRoleAsync(user, UserRoles.Patient.ToString());
-        await _signInManager.SignInAsync(user, true);
+        await _userManager.AddToRoleAsync(user.AppUser, UserRoles.Patient.ToString());
+        await _signInManager.SignInAsync(user.AppUser, true);
+        await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index", "Home", new { Area = "" });
+        return RedirectToAction("Index", "Patient", new { Area = "" });
     }
 
     public async Task<IActionResult> Logout()

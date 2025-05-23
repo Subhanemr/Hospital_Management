@@ -25,7 +25,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Index(int page = 1, string? search = null, int take = 15)
         {
             page = page < 1 ? 1 : page;
-            var query = _context.Patients
+            var query = _context.Patients.Include(x => x.AppUser)
                 .Where(p => !p.IsDeleted)
                 .Include(p => p.AppUser)
                 .AsQueryable();

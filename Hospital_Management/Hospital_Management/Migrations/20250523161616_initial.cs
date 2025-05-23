@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hospital_Management.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,10 +30,10 @@ namespace Hospital_Management.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActivate = table.Column<bool>(type: "bit", nullable: false),
                     DoctorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PatientId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -168,7 +168,7 @@ namespace Hospital_Management.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Specialty = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Specialty = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
                     WorkingHours = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     RoomNumber = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
