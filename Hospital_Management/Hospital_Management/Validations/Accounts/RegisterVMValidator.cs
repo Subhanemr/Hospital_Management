@@ -16,8 +16,7 @@ public class RegisterVMValidator : AbstractValidator<RegisterVM>
             .EmailAddress().WithMessage("Email formatı yanlışdır.");
 
         RuleFor(x => x.PhoneNumber)
-            .NotEmpty().WithMessage("Telefon nömrəsi boş ola bilməz.")
-            .Matches(@"^\+?\d{10,15}$").WithMessage("Telefon nömrəsi düzgün formatda olmalıdır (10–15 rəqəm).");
+            .NotEmpty().WithMessage("Telefon nömrəsi boş ola bilməz.");
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Ad boş ola bilməz.")

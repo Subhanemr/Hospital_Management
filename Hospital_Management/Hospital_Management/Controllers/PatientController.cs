@@ -3,9 +3,11 @@ using Hospital_Management.DAL;
 using Hospital_Management.Entities;
 using Hospital_Management.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace Hospital_Management.Controllers
 {
@@ -14,12 +16,14 @@ namespace Hospital_Management.Controllers
     public class PatientController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public PatientController(AppDbContext context, IMapper mapper)
+        public PatientController(AppDbContext context, IMapper mapper, UserManager<AppUser> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? search = null, int take = 15)
@@ -142,8 +146,12 @@ namespace Hospital_Management.Controllers
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
             if (patient == null)
                 return NotFound("Bazadan silinəcək pasiyent tapılmadı.");
+            var user = await _userManager.FindByIdAsync(patient.AppUserId);
+            if (user == null)
+                return NotFound("Bazadan silinəcək User tapılmadı.");
 
             _context.Patients.Remove(patient);
+            await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "Pasiyent tam silindi.";
