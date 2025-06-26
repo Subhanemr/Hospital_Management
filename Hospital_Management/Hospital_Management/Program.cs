@@ -31,7 +31,6 @@ app.Use(async (context, next) =>
     await next();
 });
 
-
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

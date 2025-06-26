@@ -38,10 +38,10 @@ namespace Hospital_Management.Extantions
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = true;
 
-                options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = false;
 
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);

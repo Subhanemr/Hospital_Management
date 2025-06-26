@@ -66,7 +66,7 @@ namespace Hospital_Management.Controllers
             // 1. Login olan istifadəçinin ID-si
             var userId = _http.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
-                return Unauthorized("İstifadəçi daxil olmayıb.");
+                throw new Exception("İstifadəçi daxil olmayıb.");
 
             // 2. İstifadəçini bütün əlaqələri ilə birgə query-ə daxil et
             var query = _userManager.Users
@@ -110,7 +110,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var user = await _userManager.Users
                 .Include(u => u.Doctor)
@@ -118,7 +118,7 @@ namespace Hospital_Management.Controllers
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
-                return NotFound("İstifadəçi tapılmadı.");
+                throw new Exception("İstifadəçi tapılmadı.");
 
             var vm = _mapper.Map<AppUserGetVM>(user);
             return View(vm);
@@ -128,15 +128,15 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
-                return NotFound("Silinəcək istifadəçi tapılmadı.");
+                throw new Exception("Silinəcək istifadəçi tapılmadı.");
 
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
-                return BadRequest("İstifadəçi silinərkən xəta baş verdi.");
+                throw new Exception("İstifadəçi silinərkən xəta baş verdi.");
 
             TempData["Message"] = "İstifadəçi uğurla silindi.";
             return RedirectToAction(nameof(Index));
@@ -146,17 +146,17 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> ToggleActive(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
-                return NotFound("İstifadəçi tapılmadı.");
+                throw new Exception("İstifadəçi tapılmadı.");
 
             user.IsActivate = !user.IsActivate;
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
-                return BadRequest("Status dəyişdirilə bilmədi.");
+                throw new Exception("Status dəyişdirilə bilmədi.");
 
             TempData["Message"] = user.IsActivate ? "İstifadəçi aktiv edildi." : "İstifadəçi deaktiv edildi.";
             return RedirectToAction(nameof(Index));

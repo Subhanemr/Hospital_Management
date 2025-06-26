@@ -62,7 +62,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var card = await _context.MedicalCards
                 .Include(mc => mc.Patient).ThenInclude(p => p.AppUser)
@@ -100,10 +100,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var card = await _context.MedicalCards.FirstOrDefaultAsync(mc => mc.Id == id && !mc.IsDeleted);
-            if (card == null) return NotFound();
+            if (card == null)
+                throw new Exception("Card tapılmadı");
 
             var vm = _mapper.Map<MedicalCardUpdateVM>(card);
             await LoadPatients();
@@ -114,7 +115,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id, MedicalCardUpdateVM vm)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             if (!ModelState.IsValid)
             {
@@ -123,7 +124,8 @@ namespace Hospital_Management.Controllers
             }
 
             var card = await _context.MedicalCards.FirstOrDefaultAsync(mc => mc.Id == id);
-            if (card == null) return NotFound();
+            if (card == null)
+                throw new Exception("Card tapılmadı");
 
             _mapper.Map(vm, card);
             _context.MedicalCards.Update(card);
@@ -139,7 +141,8 @@ namespace Hospital_Management.Controllers
                 return BadRequest("ID boş ola bilməz.");
 
             var card = await _context.MedicalCards.FirstOrDefaultAsync(mc => mc.Id == id);
-            if (card == null) return NotFound();
+            if (card == null) 
+                throw new Exception("Card tapılmadı");
 
             card.IsDeleted = !card.IsDeleted;
             _context.MedicalCards.Update(card);
@@ -153,10 +156,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var card = await _context.MedicalCards.FirstOrDefaultAsync(mc => mc.Id == id);
-            if (card == null) return NotFound();
+            if (card == null) 
+                throw new Exception("Card tapılmadı");
 
             _context.MedicalCards.Remove(card);
             await _context.SaveChangesAsync();

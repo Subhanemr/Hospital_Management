@@ -66,7 +66,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var patient = await _context.Patients
                 .Include(p => p.AppUser)
@@ -74,7 +74,7 @@ namespace Hospital_Management.Controllers
                 .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
 
             if (patient == null)
-                return NotFound("Pasiyent tapılmadı.");
+                throw new Exception("Pasiyent tapılmadı.");
 
             var vm = _mapper.Map<PatientGetVM>(patient);
             return View(vm);
@@ -83,13 +83,13 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var patient = await _context.Patients
                 .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
 
             if (patient == null)
-                return NotFound("Redaktə ediləcək pasiyent tapılmadı.");
+                throw new Exception("Redaktə ediləcək pasiyent tapılmadı.");
 
             var vm = _mapper.Map<PatientUpdateVM>(patient);
             await LoadUsers();
@@ -100,7 +100,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id, PatientUpdateVM vm)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             if (!ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace Hospital_Management.Controllers
 
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
             if (patient == null)
-                return NotFound("Pasiyent tapılmadı.");
+                throw new Exception("Pasiyent tapılmadı.");
 
             _mapper.Map(vm, patient);
             _context.Patients.Update(patient);
@@ -123,11 +123,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> SoftDelete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
             if (patient == null)
-                return NotFound("Pasiyent tapılmadı.");
+                throw new Exception("Pasiyent tapılmadı.");
 
             patient.IsDeleted = !patient.IsDeleted;
             _context.Patients.Update(patient);
@@ -141,14 +141,14 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
             if (patient == null)
-                return NotFound("Bazadan silinəcək pasiyent tapılmadı.");
+                throw new Exception("Bazadan silinəcək pasiyent tapılmadı.");
             var user = await _userManager.FindByIdAsync(patient.AppUserId);
             if (user == null)
-                return NotFound("Bazadan silinəcək User tapılmadı.");
+                throw new Exception("Bazadan silinəcək User tapılmadı.");
 
             _context.Patients.Remove(patient);
             await _userManager.DeleteAsync(user);

@@ -64,7 +64,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var appointment = await _context.Appointments
                 .Include(a => a.Doctor)
@@ -104,11 +104,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id && !a.IsDeleted);
             if (appointment == null)
-                return NotFound("Redaktə ediləcək görüş tapılmadı.");
+                throw new Exception("Redaktə ediləcək görüş tapılmadı.");
 
             var vm = _mapper.Map<AppointmentUpdateVM>(appointment);
             await LoadDoctorAndPatientViewBags();
@@ -119,7 +119,7 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Update(string id, AppointmentUpdateVM vm)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             if (!ModelState.IsValid)
             {
@@ -129,7 +129,7 @@ namespace Hospital_Management.Controllers
 
             var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
             if (appointment == null)
-                return NotFound("Görüş tapılmadı.");
+                throw new Exception("Görüş tapılmadı.");
 
             _mapper.Map(vm, appointment);
             _context.Appointments.Update(appointment);
@@ -142,11 +142,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> SoftDelete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
             if (appointment == null)
-                return NotFound("Silinəcək görüş tapılmadı.");
+                throw new Exception("Silinəcək görüş tapılmadı.");
 
             appointment.IsDeleted = !appointment.IsDeleted;
             _context.Appointments.Update(appointment);
@@ -160,11 +160,11 @@ namespace Hospital_Management.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest("ID boş ola bilməz.");
+                throw new Exception("ID boş ola bilməz.");
 
             var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
             if (appointment == null)
-                return NotFound("Silinəcək görüş bazada tapılmadı.");
+                throw new Exception("Silinəcək görüş bazada tapılmadı.");
 
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();

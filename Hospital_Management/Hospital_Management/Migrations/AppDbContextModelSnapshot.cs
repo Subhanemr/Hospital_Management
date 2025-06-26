@@ -159,7 +159,7 @@ namespace Hospital_Management.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Hospital_Management.Entities.Doctor", b =>
@@ -207,7 +207,7 @@ namespace Hospital_Management.Migrations
                     b.HasIndex("AppUserId")
                         .IsUnique();
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("Hospital_Management.Entities.MedicalCard", b =>
@@ -249,7 +249,7 @@ namespace Hospital_Management.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("MedicalCards");
+                    b.ToTable("MedicalCards", (string)null);
                 });
 
             modelBuilder.Entity("Hospital_Management.Entities.Patient", b =>
@@ -282,7 +282,7 @@ namespace Hospital_Management.Migrations
                     b.HasIndex("AppUserId")
                         .IsUnique();
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

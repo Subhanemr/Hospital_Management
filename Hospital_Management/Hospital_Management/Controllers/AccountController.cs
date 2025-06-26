@@ -25,7 +25,7 @@ public class AccountController : Controller
     }
 
     [AllowAnonymous]
-    public async  Task<IActionResult> Login()
+    public IActionResult Login()
     {
         return View();
     }
@@ -44,14 +44,14 @@ public class AccountController : Controller
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "İstifadəçi adı, email və ya şifrə yanlışdır.");
-                return BadRequest("İstifadəçi tapılmadı.");
+                return View();
             }
         }
 
         if (user.IsActivate == true)
         {
             ModelState.AddModelError(string.Empty, "Hesabınız aktiv deyil.");
-            return BadRequest("İstifadəçi aktiv deyil.");
+            return View();
         }
 
         var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.IsRemembered, true);
@@ -59,20 +59,20 @@ public class AccountController : Controller
         if (result.IsLockedOut)
         {
             ModelState.AddModelError(string.Empty, "Hesabınız bloklanıb. Zəhmət olmasa gözləyin.");
-            return BadRequest("Hesab bloklanıb.");
+            return View();
         }
 
         if (!result.Succeeded)
         {
             ModelState.AddModelError(string.Empty, "İstifadəçi adı, email və ya şifrə yanlışdır.");
-            return BadRequest("Şifrə və ya istifadəçi yanlışdır.");
+            return View();
         }
 
         return RedirectToAction("Index", "Home", new { Area = "" });
     }
-    [Authorize]
 
-    public async Task<IActionResult> RegisterDoctor()
+    [Authorize]
+    public IActionResult RegisterDoctor()
     {
         return View();
     }
@@ -81,7 +81,7 @@ public class AccountController : Controller
     public async Task<IActionResult> RegisterDoctor(DoctorCreateVM register)
     {
         if (!ModelState.IsValid)
-            return BadRequest("Məlumatlar düzgün deyil.");
+            return View();
 
         Doctor user = _mapper.Map<Doctor>(register);
         user.AppUser.Name = user.AppUser.Name.Capitalize();
@@ -95,7 +95,7 @@ public class AccountController : Controller
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return BadRequest("İstifadəçi yaradılarkən xəta baş verdi.");
+            return View();
         }
 
         await _userManager.AddToRoleAsync(user.AppUser, UserRoles.Doctor.ToString());
@@ -103,7 +103,7 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Doctor", new { Area = "" });
     }
 
-    public async Task<IActionResult> RegisterPatient()
+    public IActionResult RegisterPatient()
     {
         return View();
     }
@@ -112,7 +112,7 @@ public class AccountController : Controller
     public async Task<IActionResult> RegisterPatient(PatientCreateVM register)
     {
         if (!ModelState.IsValid)
-            return BadRequest("Məlumatlar düzgün daxil edilməyib.");
+            return View();
 
         Patient user = _mapper.Map<Patient>(register);
         user.AppUser.Name = user.AppUser.Name.Capitalize();
@@ -127,7 +127,7 @@ public class AccountController : Controller
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return BadRequest("İstifadəçi yaradılarkən xəta baş verdi.");
+            return View();
         }
 
         await _userManager.AddToRoleAsync(user.AppUser, UserRoles.Patient.ToString());
